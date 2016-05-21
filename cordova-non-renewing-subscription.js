@@ -345,6 +345,7 @@
         var now = +new Date();
         cb(null, {
           expiryDate: new Date(expiryDate).toLocaleDateString() + " at " + new Date(expiryDate).toLocaleTimeString(),
+          expiryTimestamp: expiryDate,
           subscriber: now <= expiryDate,
           expired:    now > expiryDate
         });
@@ -352,6 +353,7 @@
       else {
         cb(null, {
           expiryDate: null,
+          expiryTimestamp: null,
           subscriber: false,
           expired:    false
         });

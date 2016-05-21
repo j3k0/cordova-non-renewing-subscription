@@ -2,15 +2,33 @@
 
 Simple API for Non-Renewing Subscriptions based on Fovea's Cordova Purchase Plugin
 
+## What is that?
+
+Your app only wants 1 type of In-App Purchase: a Non-Renewing Subscription.
+
+You propose only 1 or 2 purchase options? (like 1 month and 1 year).
+
+This extension is probably for you: it'll handle every aspect of the In-App Purchase flow internally and will just let you know if a user is subscribed or not.
+
+It's the easiest way to integrate Non-Renewing Subscriptions on both iOS and Android the world has ever seen!
+
 ## Getting Started
 
 ### Setup
 
-Install [Cordova's In-App Purchase Plugin](https://github.com/j3k0/cordova-plugin-purchase).
+Install [Cordova's In-App Purchase Plugin](https://github.com/j3k0/cordova-plugin-purchase). Follow instructions located there on how to setup your app and your in-app products. In particular, create your "non-renewing subscriptions" product on iTunes Connect, your "Managed" products on Google Play.
 
-Download [cordova-non-renewing-subscription.js](https://github.com/j3k0/cordova-non-renewing-subscription/raw/master/cordova-non-renewing-subscription.js), copy it to your `www` directory and load it from your `index.html` file. Alternatively (if that suits your workflow), you can retrieve the file from the [npm package cordova-non-renewing-subscription](https://www.npmjs.com/package/cordova-non-renewing-subscription).
+Download the javascript file [cordova-non-renewing-subscription.js](https://github.com/j3k0/cordova-non-renewing-subscription/raw/master/cordova-non-renewing-subscription.js), copy it to your `www` directory and load it from your `index.html` file. Alternatively (if that suits your workflow), you can retrieve the file from the [npm package cordova-non-renewing-subscription](https://www.npmjs.com/package/cordova-non-renewing-subscription).
 
-### Example
+You should see something like this, preferably right after including `cordova.js`.
+
+```html
+    <script type="text/javascript" src="libs/cordova-non-renewing-subscription.js"></script>
+```
+
+(change `libs` to the place where you did put the js file)
+
+### Usage
 
 A good starting point to get an idea is the [cordova non-renewing subscription demo](https://github.com/j3k0/cordova-non-renewing-subscription-demo) project.
 
@@ -45,7 +63,8 @@ document.addEventListener('deviceready', function() {
     // Make sure this button opens the subscription manager:
     // nonRenewing.openSubscriptionManager();
 
-    document.getElementsByClassName('manage-subscription')[0].addEventListener('click', function(event) {
+    var button = document.getElementsByClassName('manage-subscription')[0];
+    button.addEventListener('click', function(event) {
         console.log('showMainScreen -> openSubscriptionManager');
         event.preventDefault();
         nonRenewing.openSubscriptionManager();
@@ -87,6 +106,19 @@ Available options:
 #### nonRenewing.openSubscriptionManager()
 
 Opens a popover that shows the user the current subscription status, and options to renew or extend it.
+
+#### nonRenewing.getStatus(callback)
+
+Will load the subscription status and return it to you.
+
+The callback takes 2 arguments:
+
+1. an error string (will be null if loading the subscription status succeeded)
+2. a status object with the following fields:
+  * `subscriber`: true if the user is a subscriber
+  * `expiryDate`: human readable date
+  * `expired`: true if the user was a subscriber, but the expiry date has passed
+  * `expiryTimestamp`: timestamp containing the expiry date (millseconds since 1970)
 
 ### Connect to a backend server
 
@@ -154,8 +186,22 @@ nonRenewing.initialize({
 
 ```
 
+The extension will keep in cache the value for the expiry date, so it's not making requests to the server more than once.
+
+Of course, when subscription are handled on a "per-user" basis and not "per-device", you will want to reset the cached value when user changes.
+
 ### Handling login/logout events
 
-When an user logs in or out, it's better to reset the expiryDate cached by the extension.
+When an user logs in or out, you will want to reset the expiry date cached by the extension.
 
 To do so, just call `nonRenewing.reset();`.
+
+### Author / Copyright
+
+This code is published under the MIT license.
+
+Developed by Jean-Christophe Hoelt.
+
+Initial development sponsored by interactivetools.com
+
+Copyright 2016, Fovea.cc
