@@ -1,6 +1,6 @@
 {
   "name": "cordova-non-renewing-subscription",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Non-renewing subscription extension for Fovea's cordova purchase plugin",
   "main": "cordova-non-renewing-subscription.js",
   "scripts": {
