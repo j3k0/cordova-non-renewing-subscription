@@ -335,6 +335,10 @@
     }.bind(this));
   };
 
+  Controller.prototype.reset = function() {
+    this.expiryStore.reset();
+  };
+
   Controller.prototype.loadStatus = function(cb) {
     this.expiryStore.load(function(err, expiryDate) {
       if (expiryDate > 0) {
@@ -441,6 +445,11 @@
       this.expiryDate = +value;
       save(value, cb);
     }.bind(this);
+
+    // Cleanup the cache
+    this.reset = function() {
+      this.expiryDate = undefined;
+    };
   };
 
   nonRenewing.initialize = function(options) {
@@ -455,6 +464,8 @@
     this.controller = new Controller({
       verbosity: options.verbosity,
       products:  options.products,
+      loadExpiryDate: options.loadExpiryDate,
+      saveExpiryDate: options.loadExpiryDate,
       view:      this.view
     });
 
@@ -463,6 +474,14 @@
 
   nonRenewing.openSubscriptionManager = function() {
     this.controller.openStatusView();
+  };
+
+  nonRenewing.getStatus = function(callback) {
+    this.controller.loadStatus(callback);
+  };
+
+  nonRenewing.reset = function() {
+    this.controller.reset();
   };
 
   /*
