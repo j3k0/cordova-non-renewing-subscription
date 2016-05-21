@@ -1,0 +1,31 @@
+{
+  "name": "cordova-non-renewing-subscription",
+  "version": "1.0.0",
+  "description": "Non-renewing subscription extension for Fovea's cordova purchase plugin",
+  "main": "cordova-non-renewing-subscription.js",
+  "scripts": {
+    "test": "eslint cordova-non-renewing.subscription.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/j3k0/cordova-non-renewing-subscription.git"
+  },
+  "keywords": [
+    "cordova",
+    "purchase",
+    "plugin",
+    "extension",
+    "non-renewing",
+    "subscription"
+  ],
+  "author": "Jean-Christophe Hoelt <hoelt@fovea.cc>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/j3k0/cordova-non-renewing-subscription/issues"
+  },
+  "homepage": "https://github.com/j3k0/cordova-non-renewing-subscription#readme",
+  "dependencies": {
+    "cc.fovea.cordova.purchase": "^5.0.2",
+    "eslint": "^2.10.2"
+  }
+}
