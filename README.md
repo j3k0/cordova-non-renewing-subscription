@@ -120,6 +120,26 @@ The callback takes 2 arguments:
   * `expired`: true if the user was a subscriber, but the expiry date has passed
   * `expiryTimestamp`: timestamp containing the expiry date (millseconds since 1970)
 
+### Monitor change of subscription status
+
+You can register listeners using the `nonRenewing.onStatusChange` method.
+
+Here's an example of that.
+
+```js
+nonRenewing.onStatusChange(function(status) {
+    if (!status) {
+        console.log("Status is unknown");
+    }
+    else {
+        console.log("Is Subscribed: " + status.subscriber);
+        console.log("Is Subscribed: " + status.subscriber);
+    }
+});
+```
+
+The `status` parameter is the same as `getStatus`, it can be null when the status is not known.
+
 ### Connect to a backend server
 
 By default, the subscription status is stored in localStorage. As such, this will only work on a single device. It can be fine if you're building a minimal viable product.

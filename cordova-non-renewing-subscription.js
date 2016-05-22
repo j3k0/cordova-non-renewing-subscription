@@ -496,9 +496,11 @@
       view:      this.view
     });
 
+    this._statusChangeCallbacks = [];
     this.controller.onStatusChange = function(status) {
-      if (this.onStatusChange)
-        this.onStatusChange(status);
+      this._statusChangeCallbacks.forEach(function(cb) {
+        cb(status);
+      });
     }.bind(this);
 
     this.view.eventsHandler = this.controller.eventsHandler.bind(this.controller);
@@ -514,6 +516,11 @@
 
   nonRenewing.reset = function() {
     this.controller.reset();
+  };
+
+  nonRenewing.onStatusChange = function(cb) {
+    this._statusChangeCallbacks.push(cb);
+    this.getStatus(function(err, status) { cb(status); });
   };
 
 }).apply(this);
