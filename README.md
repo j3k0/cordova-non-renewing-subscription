@@ -12,6 +12,16 @@ This extension is probably for you: it'll handle every aspect of the In-App Purc
 
 It's the easiest way to integrate Non-Renewing Subscriptions on both iOS and Android the world has ever seen!
 
+## Screenshots
+
+On iOS:
+
+![iOS Non-Renewing Subscription with Cordova](https://raw.githubusercontent.com/j3k0/cordova-non-renewing-subscription/master/doc/non-renewing-ios.png)
+
+On Android:
+
+![Android Non-Renewing Subscription with Cordova](https://raw.githubusercontent.com/j3k0/cordova-non-renewing-subscription/master/doc/non-renewing-android.png)
+
 ## Getting Started
 
 ### Setup
