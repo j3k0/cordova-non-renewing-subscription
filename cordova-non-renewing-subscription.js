@@ -264,9 +264,17 @@
     this.view = options.view;
     window.store.verbosity = options.verbosity || window.store.INFO;
     this.expiryStore = new ExpiryStore(options.loadExpiryDate, options.saveExpiryDate);
+    this.expiryStore.onChange = this.dispatchStatusChange.bind(this);
     this.registerProducts(options.products);
     this.registerHandlers();
     window.store.refresh();
+  };
+
+  Controller.prototype.dispatchStatusChange = function() {
+    this.loadStatus(function(err, status) {
+      if (this.onStatusChange)
+        this.onStatusChange(status);
+    }.bind(this));
   };
 
   Controller.prototype.registerProducts = function(products) {
@@ -327,10 +335,9 @@
       this.expiryStore.save(expiryDate, function(err) {
         if (err)
           return this.view.showError("Can't process subscription: " + err);
-
         log("finishing " + p.id);
         p.finish();
-        return this.openStatusView();
+        this.openStatusView();
       }.bind(this));
     }.bind(this));
   };
@@ -422,35 +429,53 @@
   //   - loadExpiryDate(function(err, expiryDate) { ... })
   var ExpiryStore = function(load, save) {
 
+    // Change cached value of the expiry date.
+    // Trigger "onChange" if the value has changed.
+    var setExpiryDate = function(value) {
+      if (this.expiryDate !== value) {
+        this.expiryDate = value;
+        if (this.onChange) {
+          setTimeout(this.onChange, 0);
+        }
+      }
+    }.bind(this);
+
+    // Returns the value of the expiry date.
+    var getExpiryDate = function() {
+      return this.expiryDate;
+    }.bind(this);
+
+    // set load default to localStorage
     load = load || function(cb) {
       cb(null, localStorage.cordovanonrsdate);
     };
 
+    // set save default to localStorage
     save = save || function(value, cb) {
       localStorage.cordovanonrsdate = value;
       cb(null);
     };
 
-    // Create a version of 'load' that makes sure expiryDate is a number.
-    // And caches the loaded value.
+    // Create a version of 'load' that makes sure expiryDate is a
+    // number. And caches the loaded value.
     this.load = function(cb) {
-      if (this.expiryDate)
-        return cb(null, this.expiryDate);
+      if (getExpiryDate())
+        return cb(null, getExpiryDate());
       load(function(err, expiryDate) {
-        this.expiryDate = +expiryDate;
+        setExpiryDate(+expiryDate);
         cb(err, +expiryDate);
-      }.bind(this));
-    }.bind(this);
+      });
+    };
 
     // Save, update the cache.
     this.save = function(value, cb) {
-      this.expiryDate = +value;
+      setExpiryDate(+value);
       save(value, cb);
-    }.bind(this);
+    };
 
     // Cleanup the cache
     this.reset = function() {
-      this.expiryDate = undefined;
+      setExpiryDate(undefined);
     };
   };
 
@@ -471,6 +496,11 @@
       view:      this.view
     });
 
+    this.controller.onStatusChange = function(status) {
+      if (this.onStatusChange)
+        this.onStatusChange(status);
+    }.bind(this);
+
     this.view.eventsHandler = this.controller.eventsHandler.bind(this.controller);
   };
 
@@ -486,23 +516,5 @@
     this.controller.reset();
   };
 
-  /*
-  Method "manageSubscription":
-  This opens a dialog over the existing content (in HTML) which shows
-  the user's subscription status and expiry date
-  a button to subscribe / renew / extend the subscription.
-  Click on Subscribe/renew will open the list of products, with a Buy button for each.
-  Click "Buy" will initiate the native purchase process.
-  The above dialogs provides a default basic CSS that can be customized.
-  Every aspects of the purchase flow is managed internally by the lib.
-  Method "initialize":
-  Requires the list of product IDs.
-  Requires an adapter to an user account backend.
-
-  Concerning the "user account" backend.
-
-
-  make sure my code allows to offload rendering the list of products to the server by "POST"ing the products details to a URL that will return the HTML. This can be the general interaction pattern.
-  */
 }).apply(this);
 // vim: ts=2:sw=2:et:
