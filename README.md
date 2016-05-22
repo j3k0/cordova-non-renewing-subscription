@@ -28,12 +28,17 @@ On Android:
 
 Install [Cordova's In-App Purchase Plugin](https://github.com/j3k0/cordova-plugin-purchase). Follow instructions located there on how to setup your app and your in-app products. In particular, create your "non-renewing subscriptions" product on iTunes Connect, your "Managed" products on Google Play.
 
-Download the javascript file [cordova-non-renewing-subscription.js](https://github.com/j3k0/cordova-non-renewing-subscription/raw/master/cordova-non-renewing-subscription.js), copy it to your `www` directory and load it from your `index.html` file. Alternatively (if that suits your workflow), you can retrieve the file from the [npm package cordova-non-renewing-subscription](https://www.npmjs.com/package/cordova-non-renewing-subscription).
+Download the javascript file [cordova-non-renewing-subscription.js](https://github.com/j3k0/cordova-non-renewing-subscription/raw/master/cordova-non-renewing-subscription.js), or (if that suits your workflow) retrieve using the [npm package cordova-non-renewing-subscription](https://www.npmjs.com/package/cordova-non-renewing-subscription).
 
-You should see something like this, preferably right after including `cordova.js`.
+Copy it to your `www` directory and load it from your `index.html` file, right after including `cordova.js`.
+
+Example:
 
 ```html
+...
+    <script type="text/javascript" src="cordova.js"></script>
     <script type="text/javascript" src="libs/cordova-non-renewing-subscription.js"></script>
+...
 ```
 
 (change `libs` to the place where you did put the js file)
@@ -126,7 +131,7 @@ The callback takes 2 arguments:
 1. an error string (will be null if loading the subscription status succeeded)
 2. a status object with the following fields:
   * `subscriber`: true if the user is a subscriber
-  * `expiryDate`: human readable date
+  * `expiryDate`: human readable date (uses Javascript's `getLocaleDate()`)
   * `expired`: true if the user was a subscriber, but the expiry date has passed
   * `expiryTimestamp`: timestamp containing the expiry date (millseconds since 1970)
 
@@ -143,7 +148,7 @@ nonRenewing.onStatusChange(function(status) {
     }
     else {
         console.log("Is Subscribed: " + status.subscriber);
-        console.log("Is Subscribed: " + status.subscriber);
+        console.log("Expiry Date: " + status.expiryDate);
     }
 });
 ```
@@ -156,7 +161,7 @@ By default, the subscription status is stored in localStorage. As such, this wil
 
 For more advanced uses, it's recommended to store the subscription status on a server.
 
-This extension let you specify methods to load and save the subscription status. Here's an example:
+This extension lets you specify methods to load and save the subscription status. Here's an example:
 
 ```js
 
@@ -218,11 +223,11 @@ nonRenewing.initialize({
 
 The extension will keep in cache the value for the expiry date, so it's not making requests to the server more than once.
 
-Of course, when subscription are handled on a "per-user" basis and not "per-device", you will want to reset the cached value when user changes.
+Of course, when subscriptions are handled on a "per-user" basis and not "per-device", you will want to reset the cached value when user changes.
 
 ### Handling login/logout events
 
-When an user logs in or out, you will want to reset the expiry date cached by the extension.
+When a user logs in or out, you will want to reset the expiry date cached by the extension.
 
 To do so, just call `nonRenewing.reset();`.
 
