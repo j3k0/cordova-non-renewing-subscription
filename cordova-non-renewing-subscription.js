@@ -492,7 +492,7 @@
       verbosity: options.verbosity,
       products:  options.products,
       loadExpiryDate: options.loadExpiryDate,
-      saveExpiryDate: options.loadExpiryDate,
+      saveExpiryDate: options.saveExpiryDate,
       view:      this.view
     });
 
