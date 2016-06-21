@@ -358,7 +358,7 @@
         });
       }
       else {
-        cb(null, {
+        cb(err, {
           expiryDate: null,
           expiryTimestamp: null,
           subscriber: false,
@@ -432,7 +432,7 @@
     // Change cached value of the expiry date.
     // Trigger "onChange" if the value has changed.
     var setExpiryDate = function(value) {
-      if (this.expiryDate !== value) {
+      if (!isNaN(value) && value !== null && this.expiryDate !== value) {
         this.expiryDate = value;
         if (this.onChange) {
           setTimeout(this.onChange, 0);
