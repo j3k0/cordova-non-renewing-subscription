@@ -358,7 +358,7 @@
         });
       }
       else {
-        cb(null, {
+        cb(err, {
           expiryDate: null,
           expiryTimestamp: null,
           subscriber: false,
