@@ -481,7 +481,9 @@
 
   nonRenewing.initialize = function(options) {
 
-    this.view = new View(document.body);
+    options.dialog = options.dialog || {};
+
+    this.view = new View(options.dialog.parent || document.body);
 
     if (!window.store) {
       this.view.showError('The in-app purchase plugin is not available.');
