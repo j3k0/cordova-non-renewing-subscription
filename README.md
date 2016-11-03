@@ -233,6 +233,20 @@ When a user logs in or out, you will want to reset the expiry date cached by the
 
 To do so, just call `nonRenewing.reset();`.
 
+### Dialog options
+
+At initialization you can provide the html element that should hold the In-App Purchase dialog.
+
+```js
+nonRenewing.initialize({
+    ...
+    dialog: {
+      parent: document.querySelectorAll('.order-form')[0]
+    }
+});
+
+```
+
 ### Author / Copyright
 
 This code is published under the MIT license.
