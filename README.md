@@ -117,6 +117,8 @@ Available options:
  * `verbosity`. Default to `store.INFO`. See the cordova purchase plugin for possible value.
  * `loadExpiryDate`. Default to a function that loads from localStorage. See the related section on how to load the subscription status on your server.
  * `saveExpiryDate`. Default to a function that saves to localStorage. See the related section on how to save the subscription status on your server.
+ * `dialog`. Holds UI options for the In-App Purchase dialog.
+   - `parent`. Default to `document.body`. Parent HTML element to which to attach the In-App Purchase dialog.
 
 #### nonRenewing.openSubscriptionManager()
 
