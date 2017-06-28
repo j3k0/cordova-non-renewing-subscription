@@ -50,6 +50,7 @@
       this.el.style.left = 0;
       this.el.style.right = 0;
       this.el.style.backgroundColor = 'rgba(0,0,0,0.5)';
+      this.el.style['z-index'] = 99999999999;
       this.hide();
       parent.appendChild(this.el);
   };
